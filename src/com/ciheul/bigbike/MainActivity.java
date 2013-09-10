@@ -1,18 +1,21 @@
 package com.ciheul.bigbike;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.ciheul.bigbike.data.BigBikeContentProvider;
+import com.ciheul.bigbike.data.BigBikeDatabaseHelper;
 
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
-    // private TextView tabSelected;
     private NonSwipeableViewPager pager;
     private TabAdapter tabAdapter;
 
@@ -32,7 +35,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         tabAdapter = new TabAdapter(getSupportFragmentManager());
         pager.setAdapter(tabAdapter);
 
-        // tab should be written after ViewPager instantiation
+        /** tab instantiation should be written after ViewPager instantiation **/
+
         // create map tab
         ActionBar.Tab tabMap = getSupportActionBar().newTab();
         tabMap.setText("Map").setTabListener(this);
@@ -42,7 +46,13 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         ActionBar.Tab tabList = getSupportActionBar().newTab();
         tabList.setText("List").setTabListener(this);
         getSupportActionBar().addTab(tabList);
+
+        insertSampleData();
     }
+
+    /****************************/
+    /** ACTIONBAR TAB LISTENER **/
+    /****************************/
 
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
@@ -57,7 +67,10 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
     }
 
-    
+    /*****************/
+    /** TAB ADAPTER **/
+    /*****************/
+
     private class TabAdapter extends FragmentPagerAdapter {
 
         private static final int TAB_COUNT = 2;
@@ -70,11 +83,11 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         public Fragment getItem(int arg0) {
             switch (arg0) {
             case 0:
-                MapFragmentTab mapFragmentTab = new MapFragmentTab();
-                return mapFragmentTab;
+                MapFragment mapFragment = new MapFragment();
+                return mapFragment;
             case 1:
-                ListFragmentTab listFragmentTab = new ListFragmentTab();
-                return listFragmentTab;
+                ShelterListFragment listFragment = new ShelterListFragment();
+                return listFragment;
             }
             return null;
         }
@@ -84,4 +97,21 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             return TAB_COUNT;
         }
     }
+
+    /********************/
+    /** DEBUGGING ONLY **/
+    /********************/
+
+    private void insertSampleData() {
+        Log.d("BigBike", "insertSampleDat");
+        ContentValues values = new ContentValues();
+        values.put(BigBikeDatabaseHelper.COL_SHELTER_NAME, "Kafe Halaman");
+        values.put(BigBikeDatabaseHelper.COL_CAPACITY, 20);
+        values.put(BigBikeDatabaseHelper.COL_LON, 1.111);
+        values.put(BigBikeDatabaseHelper.COL_LAT, 6.777);
+        values.put(BigBikeDatabaseHelper.COL_UPDATED_AT, "2013-09-10T15:03:31.511158");
+
+        getContentResolver().insert(BigBikeContentProvider.SHELTER_CONTENT_URI, values);
+    }
+
 }

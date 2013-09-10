@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-public class MapFragmentTab extends SherlockFragment {
+public class MapFragment extends SherlockFragment {
 
     private ResourceProxy resourceProxy;
     private MapView myOpenMapView;
