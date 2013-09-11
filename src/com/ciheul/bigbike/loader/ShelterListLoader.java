@@ -1,19 +1,17 @@
 package com.ciheul.bigbike.loader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.ciheul.bigbike.data.BigBikeContentProvider;
-import com.ciheul.bigbike.data.BigBikeDatabaseHelper;
+import com.ciheul.bigbike.BigBikeApplication;
 
 public class ShelterListLoader extends AsyncTaskLoader<List<ShelterModel>> {
 
     // hold a reference to the loader's data here
     private List<ShelterModel> sheltersHolder;
+    BigBikeApplication app;
 
     public ShelterListLoader(Context context) {
         super(context);
@@ -25,32 +23,13 @@ public class ShelterListLoader extends AsyncTaskLoader<List<ShelterModel>> {
 
     @Override
     public List<ShelterModel> loadInBackground() {
-        List<ShelterModel> shelters = queryShelters();
+        app = (BigBikeApplication) getContext();
+        
+        List<ShelterModel> shelters = app.getShelters();
         return shelters;
     }
 
-    private List<ShelterModel> queryShelters() {
-        List<ShelterModel> shelters = new ArrayList<ShelterModel>();
-
-        String[] projection = { BigBikeDatabaseHelper.COL_SHELTER_NAME, BigBikeDatabaseHelper.COL_CAPACITY,
-                BigBikeDatabaseHelper.COL_LON, BigBikeDatabaseHelper.COL_LAT };
-        Cursor cursor = getContext().getContentResolver().query(BigBikeContentProvider.SHELTER_CONTENT_URI, projection,
-                null, null, null);
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                ShelterModel shelter = new ShelterModel();
-                shelter.setName(cursor.getString(cursor.getColumnIndexOrThrow(BigBikeDatabaseHelper.COL_SHELTER_NAME)));
-                shelter.setCapacity(cursor.getInt(cursor.getColumnIndexOrThrow(BigBikeDatabaseHelper.COL_CAPACITY)));
-                shelter.setLongitude(cursor.getDouble(cursor.getColumnIndexOrThrow(BigBikeDatabaseHelper.COL_LON)));
-                shelter.setLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(BigBikeDatabaseHelper.COL_LAT)));
-
-                shelters.add(shelter);
-            }
-        }
-
-        return shelters;
-    }
+    
 
     @Override
     public void deliverResult(List<ShelterModel> shelters) {

@@ -34,7 +34,7 @@ public class BigBikeDatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SHELTER = "CREATE TABLE " + TABLE_SHELTER + "(" + COL_SHELTER_ID
             + " integer primary key autoincrement, " + COL_SHELTER_NAME + " text unique not null, " + COL_CAPACITY
             + " integer not null, " + COL_LON + " real not null, " + COL_LAT + " text not null, " +
-            COL_UPDATED_AT + " text not null, UNIQUE(" + COL_SHELTER_NAME + ") ON CONFLICT IGNORE);";
+            COL_UPDATED_AT + " text not null, UNIQUE(" + COL_SHELTER_NAME + ") ON CONFLICT REPLACE);";
 
     // create images table
     private static final String CREATE_TABLE_IMAGES = "CREATE TABLE " + TABLE_IMAGE + "(" + COL_IMAGE_ID

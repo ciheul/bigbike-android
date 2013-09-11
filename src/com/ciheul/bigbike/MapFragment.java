@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
@@ -20,14 +19,25 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.ciheul.bigbike.loader.ShelterModel;
 
 public class MapFragment extends SherlockFragment {
 
+    private BigBikeApplication app;
     private ResourceProxy resourceProxy;
     private MapView myOpenMapView;
     private MapController myMapController;
 
     private ItemizedOverlay<OverlayItem> itemizedOverlay;
+
+    private final static double lonCenter = 107.61302;
+    private final static double latCenter = -6.89388;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        app = (BigBikeApplication) getActivity().getApplication();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,16 +60,11 @@ public class MapFragment extends SherlockFragment {
         myOpenMapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 
         myMapController = myOpenMapView.getController();
-        myMapController.setZoom(14);
+        myMapController.setZoom(15);
 
-        double lon = 107.62207;
-        double lat = -6.91552;
+        myMapController.setCenter(new GeoPoint(latCenter, lonCenter));
 
-        IGeoPoint point = new GeoPoint(lat, lon); // lat lon and not inverse
-        myMapController.setCenter(point);
-
-        ArrayList<OverlayItem> listMarker = new ArrayList<OverlayItem>();
-        listMarker.add(new OverlayItem("Bandung", "Description", new GeoPoint(lat, lon)));
+        ArrayList<OverlayItem> listMarker = getListShelterMarker();
 
         itemizedOverlay = new ItemizedIconOverlay<OverlayItem>(listMarker,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
@@ -86,6 +91,18 @@ public class MapFragment extends SherlockFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         setUserVisibleHint(true);
+    }
+
+    private ArrayList<OverlayItem> getListShelterMarker() {
+        ArrayList<ShelterModel> listShelter = (ArrayList<ShelterModel>) app.getShelters();
+
+        ArrayList<OverlayItem> listMarker = new ArrayList<OverlayItem>();
+        for (ShelterModel shelter : listShelter) {
+            listMarker.add(new OverlayItem("Bandung", "Description", new GeoPoint(shelter.getLatitude(), shelter
+                    .getLongitude())));
+        }
+
+        return listMarker;
     }
 
 }

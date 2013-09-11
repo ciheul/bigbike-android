@@ -1,18 +1,14 @@
 package com.ciheul.bigbike;
 
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.ciheul.bigbike.data.BigBikeContentProvider;
-import com.ciheul.bigbike.data.BigBikeDatabaseHelper;
 
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
@@ -47,7 +43,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         tabList.setText("List").setTabListener(this);
         getSupportActionBar().addTab(tabList);
 
-        insertSampleData();
     }
 
     /****************************/
@@ -96,22 +91,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         public int getCount() {
             return TAB_COUNT;
         }
-    }
-
-    /********************/
-    /** DEBUGGING ONLY **/
-    /********************/
-
-    private void insertSampleData() {
-        Log.d("BigBike", "insertSampleDat");
-        ContentValues values = new ContentValues();
-        values.put(BigBikeDatabaseHelper.COL_SHELTER_NAME, "Kafe Halaman");
-        values.put(BigBikeDatabaseHelper.COL_CAPACITY, 20);
-        values.put(BigBikeDatabaseHelper.COL_LON, 1.111);
-        values.put(BigBikeDatabaseHelper.COL_LAT, 6.777);
-        values.put(BigBikeDatabaseHelper.COL_UPDATED_AT, "2013-09-10T15:03:31.511158");
-
-        getContentResolver().insert(BigBikeContentProvider.SHELTER_CONTENT_URI, values);
     }
 
 }

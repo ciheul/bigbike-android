@@ -72,6 +72,7 @@ public class BigBikeContentProvider extends ContentProvider {
                 sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
+        
         return cursor;
     }
 
@@ -81,10 +82,11 @@ public class BigBikeContentProvider extends ContentProvider {
         long id = 0;
         String PATH;
         Log.d("BigBike", String.valueOf(uriType));
-        
+
         switch (uriType) {
         case SHELTERS:
-            id = db.getWritableDatabase().insertWithOnConflict(BigBikeDatabaseHelper.TABLE_SHELTER, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+            id = db.getWritableDatabase().insertWithOnConflict(BigBikeDatabaseHelper.TABLE_SHELTER, null, values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
             PATH = SHELTER_BASE_PATH;
             break;
         case IMAGES:
