@@ -1,4 +1,4 @@
-package com.ciheul.bigbike;
+package com.ciheul.bigbike.activity;
 
 import java.util.List;
 
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.ciheul.bigbike.loader.ShelterModel;
+import com.ciheul.bigbike.R;
+import com.ciheul.bigbike.data.ShelterModel;
 
 public class ShelterListAdapter extends ArrayAdapter<ShelterModel> {
 

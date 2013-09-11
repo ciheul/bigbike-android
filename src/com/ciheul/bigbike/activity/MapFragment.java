@@ -1,34 +1,29 @@
-package com.ciheul.bigbike;
+package com.ciheul.bigbike.activity;
 
 import java.util.ArrayList;
 
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
 import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.ciheul.bigbike.loader.ShelterModel;
-
-//import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
+import com.ciheul.bigbike.BigBikeApplication;
+import com.ciheul.bigbike.R;
+import com.ciheul.bigbike.data.ShelterModel;
+import com.ciheul.bigbike.extend.ViaPointInfoWindow;
 
 public class MapFragment extends SherlockFragment {
 
     private BigBikeApplication app;
-    private ResourceProxy resourceProxy;
+    // private ResourceProxy resourceProxy;
     private MapView myOpenMapView;
     private MapController myMapController;
 
@@ -59,7 +54,7 @@ public class MapFragment extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        resourceProxy = new DefaultResourceProxyImpl(getActivity().getApplicationContext());
+        // resourceProxy = new DefaultResourceProxyImpl(getActivity().getApplicationContext());
         myOpenMapView = (MapView) getActivity().findViewById(R.id.openmapview);
         myOpenMapView.setBuiltInZoomControls(true);
         myOpenMapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
@@ -88,7 +83,8 @@ public class MapFragment extends SherlockFragment {
         // myOpenMapView.getOverlays().add(itemizedOverlay);
 
         ArrayList<ExtendedOverlayItem> listMarker = getListShelterMarker();
-        itemizedOverlayBubble = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(getActivity(), listMarker, myOpenMapView);
+        itemizedOverlayBubble = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(getActivity(), listMarker,
+                myOpenMapView, new ViaPointInfoWindow(getActivity(), R.layout.bonuspack_bubble, myOpenMapView));
         myOpenMapView.getOverlays().add(itemizedOverlayBubble);
 
         myOpenMapView.invalidate();
@@ -107,8 +103,8 @@ public class MapFragment extends SherlockFragment {
 
         ArrayList<ExtendedOverlayItem> listMarker = new ArrayList<ExtendedOverlayItem>();
         for (ShelterModel shelter : listShelter) {
-            listMarker.add(new ExtendedOverlayItem(shelter.getName(), "Kapasitas: " + shelter.getCapacity(), new GeoPoint(
-                    shelter.getLatitude(), shelter.getLongitude()), null));
+            listMarker.add(new ExtendedOverlayItem(shelter.getName(), "Kapasitas: " + shelter.getCapacity(),
+                    new GeoPoint(shelter.getLatitude(), shelter.getLongitude()), null));            
         }
 
         return listMarker;

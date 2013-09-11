@@ -1,19 +1,21 @@
 // good tutorial: http://tausiq.wordpress.com/2012/12/12/android-custom-adapter-listview-with-listfragment-and-loadermanager-inside-fragmentactivity/
 
-package com.ciheul.bigbike;
+package com.ciheul.bigbike.activity;
 
 import java.util.List;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.ciheul.bigbike.loader.ShelterListLoader;
-import com.ciheul.bigbike.loader.ShelterModel;
+import com.ciheul.bigbike.data.BigBikeContentProvider;
+import com.ciheul.bigbike.data.ShelterListLoader;
+import com.ciheul.bigbike.data.ShelterModel;
 
 public class ShelterListFragment extends SherlockListFragment implements
         LoaderManager.LoaderCallbacks<List<ShelterModel>> {
@@ -51,8 +53,12 @@ public class ShelterListFragment extends SherlockListFragment implements
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // Insert desired behavior here.
-        Log.d("BigBike", "Item clicked: " + id);
+        super.onListItemClick(l, v, position, id);
+        
+        Intent shelterInfoIntent = new Intent(getActivity(), ShelterInfoActivity.class);
+        Uri shelterUri = Uri.parse(BigBikeContentProvider.SHELTER_CONTENT_URI + "/" + (id+1));
+        shelterInfoIntent.putExtra(BigBikeContentProvider.SHELTER_CONTENT_ITEM_TYPE, shelterUri);
+        startActivity(shelterInfoIntent);
     }
 
     /**********************/

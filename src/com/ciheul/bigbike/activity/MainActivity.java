@@ -1,4 +1,4 @@
-package com.ciheul.bigbike;
+package com.ciheul.bigbike.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.ciheul.bigbike.R;
+import com.ciheul.bigbike.extend.NonSwipeableViewPager;
 
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 

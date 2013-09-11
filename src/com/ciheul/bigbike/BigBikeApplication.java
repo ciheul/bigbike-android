@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.ciheul.bigbike.data.BigBikeContentProvider;
 import com.ciheul.bigbike.data.BigBikeDatabaseHelper;
-import com.ciheul.bigbike.loader.ShelterModel;
+import com.ciheul.bigbike.data.ShelterModel;
 
 import android.app.Application;
 import android.content.ContentValues;

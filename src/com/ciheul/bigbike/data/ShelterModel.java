@@ -1,4 +1,4 @@
-package com.ciheul.bigbike.loader;
+package com.ciheul.bigbike.data;
 
 public class ShelterModel {
 
