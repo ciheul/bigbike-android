@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
+import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
+import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
@@ -21,6 +23,8 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ciheul.bigbike.loader.ShelterModel;
 
+//import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
+
 public class MapFragment extends SherlockFragment {
 
     private BigBikeApplication app;
@@ -28,7 +32,8 @@ public class MapFragment extends SherlockFragment {
     private MapView myOpenMapView;
     private MapController myMapController;
 
-    private ItemizedOverlay<OverlayItem> itemizedOverlay;
+    // private ItemizedOverlay<OverlayItem> itemizedOverlay;
+    private ItemizedOverlayWithBubble<ExtendedOverlayItem> itemizedOverlayBubble;
 
     private final static double lonCenter = 107.61302;
     private final static double latCenter = -6.89388;
@@ -61,27 +66,31 @@ public class MapFragment extends SherlockFragment {
 
         myMapController = myOpenMapView.getController();
         myMapController.setZoom(15);
-
         myMapController.setCenter(new GeoPoint(latCenter, lonCenter));
 
-        ArrayList<OverlayItem> listMarker = getListShelterMarker();
+        // ArrayList<OverlayItem> listMarker = getListShelterMarker();
+        //
+        // itemizedOverlay = new ItemizedIconOverlay<OverlayItem>(listMarker,
+        // new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+        // @Override
+        // public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+        // Toast.makeText(getActivity(), "single tap", Toast.LENGTH_LONG).show();
+        // return true;
+        // }
+        //
+        // @Override
+        // public boolean onItemLongPress(final int index, final OverlayItem item) {
+        // Toast.makeText(getActivity(), "long press", Toast.LENGTH_LONG).show();
+        // return true;
+        // }
+        // }, resourceProxy);
+        //
+        // myOpenMapView.getOverlays().add(itemizedOverlay);
 
-        itemizedOverlay = new ItemizedIconOverlay<OverlayItem>(listMarker,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        Toast.makeText(getActivity(), "single tap", Toast.LENGTH_LONG).show();
-                        return true;
-                    }
+        ArrayList<ExtendedOverlayItem> listMarker = getListShelterMarker();
+        itemizedOverlayBubble = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(getActivity(), listMarker, myOpenMapView);
+        myOpenMapView.getOverlays().add(itemizedOverlayBubble);
 
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        Toast.makeText(getActivity(), "long press", Toast.LENGTH_LONG).show();
-                        return true;
-                    }
-                }, resourceProxy);
-
-        myOpenMapView.getOverlays().add(itemizedOverlay);
         myOpenMapView.invalidate();
 
         myOpenMapView.setVisibility(View.VISIBLE);
@@ -93,13 +102,13 @@ public class MapFragment extends SherlockFragment {
         setUserVisibleHint(true);
     }
 
-    private ArrayList<OverlayItem> getListShelterMarker() {
+    private ArrayList<ExtendedOverlayItem> getListShelterMarker() {
         ArrayList<ShelterModel> listShelter = (ArrayList<ShelterModel>) app.getShelters();
 
-        ArrayList<OverlayItem> listMarker = new ArrayList<OverlayItem>();
+        ArrayList<ExtendedOverlayItem> listMarker = new ArrayList<ExtendedOverlayItem>();
         for (ShelterModel shelter : listShelter) {
-            listMarker.add(new OverlayItem("Bandung", "Description", new GeoPoint(shelter.getLatitude(), shelter
-                    .getLongitude())));
+            listMarker.add(new ExtendedOverlayItem(shelter.getName(), "Kapasitas: " + shelter.getCapacity(), new GeoPoint(
+                    shelter.getLatitude(), shelter.getLongitude()), null));
         }
 
         return listMarker;

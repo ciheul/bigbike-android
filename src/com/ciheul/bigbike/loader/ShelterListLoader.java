@@ -24,12 +24,10 @@ public class ShelterListLoader extends AsyncTaskLoader<List<ShelterModel>> {
     @Override
     public List<ShelterModel> loadInBackground() {
         app = (BigBikeApplication) getContext();
-        
+
         List<ShelterModel> shelters = app.getShelters();
         return shelters;
     }
-
-    
 
     @Override
     public void deliverResult(List<ShelterModel> shelters) {
@@ -121,7 +119,6 @@ public class ShelterListLoader extends AsyncTaskLoader<List<ShelterModel>> {
 
     @Override
     protected void onReset() {
-
 
         // Ensure the loader is stopped.
         onStopLoading();
